@@ -2,8 +2,8 @@
 
 #testeado con python 2.7.9
 #complementar el gestor de dependencias https://pip.pypa.io/en/stable/installing/
-#			curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-#			python get-pip.py
+#            curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+#            python get-pip.py
 #Descargar las siguientes librerias
 #python -m pip install scipy
 #python -m pip install scikit-learn   #actualizar si es necesario python -m pip install -U scikit-learn
@@ -33,7 +33,7 @@ glasses = [(10, 19), (30, 32), (37, 38), (50, 59), (63, 64),
            (194, 194), (196, 199), (260, 269), (270, 279), (300, 309),
            (330, 339), (358, 359), (360, 369)]
 
-#Pre: images coleccion de imagenes, target elemento imagen, top_n cantidad de elementos	
+#Pre: images coleccion de imagenes, target elemento imagen, top_n cantidad de elementos    
 #post: imprime las imagenes por pantalla
 
 def print_faces(images, target, top_n):
@@ -43,7 +43,7 @@ def print_faces(images, target, top_n):
     for i in range(top_n):
         # graficamos las imagenes en una matriz de 20x20
         p = fig.add_subplot(20, 20, i + 1, xticks=[], yticks=[])
-        p.imshow(images[i], cmap=plt.cm)
+        p.imshow(images[i], cmap=plt.cm.bone)
         # etiquetamos las imagenes con el valor objetivo (target value)
         p.text(0, 14, str(target[i]))
         p.text(0, 60, str(i))
@@ -77,11 +77,11 @@ def create_target(segments):
     # put 1 in the specified segments
     for (start, end) in segments:
         y[start:end + 1] = 1
-    return y	
+    return y    
 
 
 ###MAIN###
-	
+    
 #Importamos el dataset de rostros
 faces = fetch_olivetti_faces()
 
@@ -95,9 +95,9 @@ print(faces.target.shape)
 #No tenemos que escalar los atributos, porque ya se encuentran normalizados.
 print(np.max(faces.data))
 print(np.min(faces.data))
-print(np.mean(faces.data))		
-		
-#print_faces(faces.images, faces.target, 20)	#esto es para mostrar el dataset sin clasificar
+print(np.mean(faces.data))        
+        
+#print_faces(faces.images, faces.target, 20)    #esto es para mostrar el dataset sin clasificar
 
 svc_3 = SVC(kernel='linear')  #esto es clasificador o Classifier cuyo modelos es un hiperplano que separa instancias (puntos) de una clase del resto
 
@@ -115,4 +115,4 @@ print_faces(eval_faces, y_pred, 10)
 plt.show() #esto es para abrir un frame donde se pegan las imagenes
 
 
-		
+        

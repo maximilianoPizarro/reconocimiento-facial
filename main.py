@@ -64,7 +64,6 @@ class MyWindowClass(QtGui.QMainWindow, form_class):
     def __init__(self, parent=None):
         QtGui.QMainWindow.__init__(self, parent)
         self.setupUi(self)
-
         self.startButton.clicked.connect(self.start_clicked)
         self.pushButton.clicked.connect(self.pushButton_clicked)
         
@@ -76,7 +75,18 @@ class MyWindowClass(QtGui.QMainWindow, form_class):
         self.timer.timeout.connect(self.update_frame)
         self.timer.start(1)
         
+        extractAction = QtGui.QAction("Salir", self)
+        extractAction.setShortcut("Ctrl+Q")
+        extractAction.setStatusTip('Salir de la aplicación')
+        extractAction.triggered.connect(self.close_application)
         
+        menu=self.menuBar()
+        menu.addAction(extractAction)
+        menu.triggered[QtGui.QAction].connect(self.statusbar)
+        
+    def statusbar(self,q):
+        if(q.text()=="Inciar Busqueda"):
+            self.mensajeLabel.setText("reconocer y buscar")     
 
     def start_clicked(self):
         global running
@@ -88,11 +98,18 @@ class MyWindowClass(QtGui.QMainWindow, form_class):
     def pushButton_clicked(self):
         #self.nameText.setText("safa")   set texto
         #print(self.nameText.text())    get texto
-        img_name = self.nameText.text()+".png".format(0)
-        frame = q.get()
-        img = frame["img"]
+        if not q.empty():
+                if str(self.mensajeLabel.text())!="":
+                        img_name = self.nameText.text()+".png".format(0)
+                        frame = q.get()
+                        img = frame["img"]        
+                        cv2.imwrite(os.path.join('resources' , img_name), img)
+                        self.mensajeLabel.setText("Agregado exitosamente!")
+                else:
+                    self.mensajeLabel.setText("complete el nombre")   
+        else:
+                self.mensajeLabel.setText("iniciar camara")    
         
-        cv2.imwrite(os.path.join('resources' , img_name), img)
             
 
     def update_frame(self):
@@ -134,16 +151,20 @@ class MyWindowClass(QtGui.QMainWindow, form_class):
     def closeEvent(self, event):
         global running
         running = False
+    
+    def close_application(self):
+        sys.exit()   
 
 
 
 capture_thread = threading.Thread(target=grab, args = (0, q, 1920, 1080, 30))
 
-app = QtGui.QApplication(sys.argv)
-w = MyWindowClass(None)
-w.setWindowTitle('UNLa Fundamentos de la Teoria de la Computación')
-w.show()
-app.exec_()
+if __name__ == "__main__":
+    app = QtGui.QApplication(sys.argv)
+    w = MyWindowClass(None)
+    w.setWindowTitle('UNLa Fundamentos de la Teoria de la Computación')
+    w.show()
+    app.exec_()
     
     
     

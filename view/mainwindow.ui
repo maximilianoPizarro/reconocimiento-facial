@@ -115,6 +115,28 @@ background-image: url(&quot;frameunla.png&quot;);</string>
         <string>Iniciar</string>
        </property>
       </widget>
+      <widget class="QLabel" name="mensajeLabel">
+       <property name="geometry">
+        <rect>
+         <x>320</x>
+         <y>10</y>
+         <width>201</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <family>Times New Roman</family>
+         <pointsize>12</pointsize>
+         <weight>9</weight>
+         <italic>true</italic>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
      </widget>
     </item>
    </layout>
@@ -137,7 +159,6 @@ background-image: url(&quot;frameunla.png&quot;);</string>
    </widget>
    <addaction name="menuHunla"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
   <action name="actionInciar_Busqueda">
    <property name="text">
     <string>Inciar Busqueda</string>
