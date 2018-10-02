@@ -16,7 +16,7 @@ cx_Freeze.setup(
 	version="1.0",   
 	name="Reconocimiento Facial",
      
-	options={"build_exe":{"include_files":["view"]}},
+	options={"build_exe":{"include_files":["view","resources"]}},
     
 	description=" Sistema de Reconocimiento Facial",
     	

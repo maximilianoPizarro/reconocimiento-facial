@@ -9,19 +9,21 @@ __license__ = "UNLa"
 from PySide import QtCore, QtGui
 import sys
 import cv2
-import numpy as np
+#import numpy as np
 import threading
-import time
+#import time
+from numpy.core import multiarray
 import queue
-from pyside_uicfix import loadUiType
+from resources import pyside_uicfix 
 import os
 
 running = False
 capture_thread = None
 #form_class = loadUiType("simple.ui")[0]
-form_class = loadUiType("view/mainwindow.ui")[0]
+form_class = pyside_uicfix.loadUiType("view/mainwindow.ui")[0]
 q = queue.Queue()
 cascPath = "resources/haarcascade_frontalface_default.xml"
+font = cv2.FONT_HERSHEY_SIMPLEX
 
 def grab(cam, queue, width, height, fps):
     global running
@@ -100,10 +102,24 @@ class MyWindowClass(QtGui.QMainWindow, form_class):
         #print(self.nameText.text())    get texto
         if not q.empty():
                 if str(self.mensajeLabel.text())!="":
+                    
                         img_name = self.nameText.text()+".png".format(0)
                         frame = q.get()
                         img = frame["img"]        
-                        cv2.imwrite(os.path.join('resources' , img_name), img)
+                        #cv2.imwrite(os.path.join('resources' , img_name), img)
+                        faceCascade = cv2.CascadeClassifier(cascPath)
+                        
+                        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)   
+                        faces = faceCascade.detectMultiScale(
+                                gray,
+                                scaleFactor=1.1,
+                                minNeighbors=5,
+                                minSize=(30, 30)
+                            )                        
+                        # Draw a rectangle around the faces
+                        for (x, y, w, h) in faces:
+                            roi = img[y:y+h, x:x+w]
+                            cv2.imwrite(os.path.join('resources' , img_name), roi)
                         self.mensajeLabel.setText("Agregado exitosamente!")
                 else:
                     self.mensajeLabel.setText("complete el nombre")   
@@ -147,12 +163,20 @@ class MyWindowClass(QtGui.QMainWindow, form_class):
             # Draw a rectangle around the faces
             for (x, y, w, h) in faces:
                 cv2.rectangle(img, (x, y), (x+w, y+h), (0, 255, 0), 2)
+                #roi = img[y:y+h, x:x+w]
+                #cv2.imwrite(os.path.join('resources' , 'prueba.jpg'), roi)
+                #cv2.putText(img, 'This one!', (x+w, y+h), font, 0.8, (0, 255, 0), 2, cv2.LINE_AA)
+                #cv2.imwrite(os.path.join('resources' , 'prueba.jpg'), img)
 
     def closeEvent(self, event):
         global running
         running = False
     
     def close_application(self):
+        global running
+        running = False
+        if capture_thread.is_alive():
+            capture_thread._delete()
         sys.exit()   
 
 
