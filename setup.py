@@ -16,7 +16,11 @@ cx_Freeze.setup(
 	version="1.0",   
 	name="Reconocimiento Facial",
      
-	options={"build_exe":{"include_files":["view","resources"]}},
+	options={"build_exe":
+				{"packages":["cv2.cv2","numpy","threading","queue"],
+				  "include_files":["view","resources"], "includes": ["PyQt5"], "excludes": ["tkinter"]
+				}
+			},
     
 	description=" Sistema de Reconocimiento Facial",
     	
