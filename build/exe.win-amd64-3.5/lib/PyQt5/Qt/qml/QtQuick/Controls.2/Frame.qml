@@ -34,10 +34,10 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.11
-import QtQuick.Controls 2.4
-import QtQuick.Controls.impl 2.4
-import QtQuick.Templates 2.4 as T
+import QtQuick 2.9
+import QtQuick.Controls 2.2
+import QtQuick.Controls.impl 2.2
+import QtQuick.Templates 2.2 as T
 
 T.Frame {
     id: control
@@ -52,6 +52,6 @@ T.Frame {
 
     background: Rectangle {
         color: "transparent"
-        border.color: control.palette.mid
+        border.color: Default.frameLightColor
     }
 }

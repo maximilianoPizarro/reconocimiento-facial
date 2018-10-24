@@ -34,9 +34,9 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.11
-import QtQuick.Templates 2.4 as T
-import QtQuick.Controls.Material 2.4
+import QtQuick 2.9
+import QtQuick.Templates 2.2 as T
+import QtQuick.Controls.Material 2.2
 
 T.ScrollIndicator {
     id: control
@@ -49,6 +49,8 @@ T.ScrollIndicator {
     padding: 2
 
     contentItem: Rectangle {
+        id: indicator
+
         implicitWidth: 4
         implicitHeight: 4
 
@@ -59,7 +61,7 @@ T.ScrollIndicator {
         states: State {
             name: "active"
             when: control.active
-            PropertyChanges { target: control.contentItem; opacity: 0.75 }
+            PropertyChanges { target: indicator; opacity: 0.75 }
         }
 
         transitions: [
@@ -67,7 +69,7 @@ T.ScrollIndicator {
                 from: "active"
                 SequentialAnimation {
                     PauseAnimation { duration: 450 }
-                    NumberAnimation { target: control.contentItem; duration: 200; property: "opacity"; to: 0.0 }
+                    NumberAnimation { target: indicator; duration: 200; property: "opacity"; to: 0.0 }
                 }
             }
         ]

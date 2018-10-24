@@ -34,12 +34,10 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.11
-import QtQuick.Templates 2.4 as T
-import QtQuick.Controls 2.4
-import QtQuick.Controls.impl 2.4
-import QtQuick.Controls.Material 2.4
-import QtQuick.Controls.Material.impl 2.4
+import QtQuick 2.9
+import QtQuick.Templates 2.2 as T
+import QtQuick.Controls.Material 2.2
+import QtQuick.Controls.Material.impl 2.2
 
 T.CheckDelegate {
     id: control
@@ -52,13 +50,9 @@ T.CheckDelegate {
     baselineOffset: contentItem.y + contentItem.baselineOffset
 
     padding: 16
-    topPadding: 8
-    bottomPadding: 8
+    topPadding: 14
+    bottomPadding: 14
     spacing: 16
-
-    icon.width: 24
-    icon.height: 24
-    icon.color: enabled ? Material.foreground : Material.hintTextColor
 
     indicator: CheckIndicator {
         x: text ? (control.mirrored ? control.leftPadding : control.width - width - control.rightPadding) : control.leftPadding + (control.availableWidth - width) / 2
@@ -66,19 +60,17 @@ T.CheckDelegate {
         control: control
     }
 
-    contentItem: IconLabel {
+    contentItem: Text {
         leftPadding: !control.mirrored ? 0 : control.indicator.width + control.spacing
         rightPadding: control.mirrored ? 0 : control.indicator.width + control.spacing
 
-        spacing: control.spacing
-        mirrored: control.mirrored
-        display: control.display
-        alignment: control.display === IconLabel.IconOnly || control.display === IconLabel.TextUnderIcon ? Qt.AlignCenter : Qt.AlignLeft
-
-        icon: control.icon
         text: control.text
         font: control.font
         color: control.enabled ? control.Material.foreground : control.Material.hintTextColor
+        elide: Text.ElideRight
+        visible: control.text
+        horizontalAlignment: Text.AlignLeft
+        verticalAlignment: Text.AlignVCenter
     }
 
     background: Rectangle {

@@ -34,12 +34,10 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.11
-import QtQuick.Templates 2.4 as T
-import QtQuick.Controls 2.4
-import QtQuick.Controls.impl 2.4
-import QtQuick.Controls.Universal 2.4
-import QtQuick.Controls.Universal.impl 2.4
+import QtQuick 2.9
+import QtQuick.Templates 2.2 as T
+import QtQuick.Controls.Universal 2.2
+import QtQuick.Controls.Universal.impl 2.2
 
 T.SwitchDelegate {
     id: control
@@ -57,29 +55,25 @@ T.SwitchDelegate {
     topPadding: padding - 1
     bottomPadding: padding + 1
 
-    icon.width: 20
-    icon.height: 20
-    icon.color: Color.transparent(Universal.foreground, enabled ? 1.0 : 0.2)
-
     indicator: SwitchIndicator {
         x: text ? (control.mirrored ? control.leftPadding : control.width - width - control.rightPadding) : control.leftPadding + (control.availableWidth - width) / 2
         y: control.topPadding + (control.availableHeight - height) / 2
         control: control
     }
 
-    contentItem: IconLabel {
+    contentItem: Text {
         leftPadding: !control.mirrored ? 0 : control.indicator.width + control.spacing
         rightPadding: control.mirrored ? 0 : control.indicator.width + control.spacing
 
-        spacing: control.spacing
-        mirrored: control.mirrored
-        display: control.display
-        alignment: control.display === IconLabel.IconOnly || control.display === IconLabel.TextUnderIcon ? Qt.AlignCenter : Qt.AlignLeft
-
-        icon: control.icon
         text: control.text
         font: control.font
-        color: Color.transparent(control.Universal.foreground, enabled ? 1.0 : 0.2)
+        elide: Text.ElideRight
+        visible: control.text
+        horizontalAlignment: Text.AlignLeft
+        verticalAlignment: Text.AlignVCenter
+
+        opacity: enabled ? 1.0 : 0.2
+        color: control.Universal.foreground
     }
 
     background: Rectangle {

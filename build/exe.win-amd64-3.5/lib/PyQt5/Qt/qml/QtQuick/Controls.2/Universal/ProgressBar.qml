@@ -34,10 +34,10 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.11
-import QtQuick.Templates 2.4 as T
-import QtQuick.Controls.Universal 2.4
-import QtQuick.Controls.Universal.impl 2.4
+import QtQuick 2.9
+import QtQuick.Templates 2.2 as T
+import QtQuick.Controls.Universal 2.2
+import QtQuick.Controls.Universal.impl 2.2
 
 T.ProgressBar {
     id: control
@@ -59,7 +59,10 @@ T.ProgressBar {
     background: Rectangle {
         implicitWidth: 100
         implicitHeight: 10
-        y: (control.height - height) / 2
+
+        x: control.leftPadding
+        y: control.topPadding + (control.availableHeight - height) / 2
+        width: control.availableWidth
         height: 10
 
         visible: !control.indeterminate

@@ -8,7 +8,7 @@ __license__ = "UNLa"
 
 from PyQt5 import QtCore, QtGui, uic,QtWidgets
 import sys
-import numpy
+#import numpy
 import cv2.cv2
 #import numpy as np
 import threading

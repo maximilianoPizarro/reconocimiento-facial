@@ -34,11 +34,11 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.11
+import QtQuick 2.9
 import QtQuick.Window 2.3
-import QtQuick.Controls 2.4
-import QtQuick.Controls.impl 2.4
-import QtQuick.Templates 2.4 as T
+import QtQuick.Controls 2.2
+import QtQuick.Controls.impl 2.2
+import QtQuick.Templates 2.2 as T
 
 T.ComboBox {
     id: control
@@ -61,12 +61,12 @@ T.ComboBox {
         hoverEnabled: control.hoverEnabled
     }
 
-    indicator: ColorImage {
+    indicator: Image {
         x: control.mirrored ? control.padding : control.width - width - control.padding
         y: control.topPadding + (control.availableHeight - height) / 2
-        color: control.palette.dark
-        defaultColor: "#353637"
-        source: "qrc:/qt-project.org/imports/QtQuick/Controls.2/images/double-arrow.png"
+        source: "image://default/double-arrow/" + (!control.editable && control.visualFocus ? Default.focusColor : Default.textColor)
+        sourceSize.width: width
+        sourceSize.height: height
         opacity: enabled ? 1 : 0.3
     }
 
@@ -80,30 +80,32 @@ T.ComboBox {
 
         enabled: control.editable
         autoScroll: control.editable
-        readOnly: control.down
+        readOnly: control.popup.visible
         inputMethodHints: control.inputMethodHints
         validator: control.validator
 
         font: control.font
-        color: control.editable ? control.palette.text : control.palette.buttonText
-        selectionColor: control.palette.highlight
-        selectedTextColor: control.palette.highlightedText
+        color: !control.editable && control.visualFocus ? Default.focusColor : Default.textColor
+        selectionColor: Default.focusColor
+        selectedTextColor: Default.textLightColor
+        horizontalAlignment: Text.AlignLeft
         verticalAlignment: Text.AlignVCenter
+        opacity: control.enabled ? 1 : 0.3
 
         background: Rectangle {
-            visible: control.enabled && control.editable && !control.flat
+            visible: control.editable && !control.flat
             border.width: parent && parent.activeFocus ? 2 : 1
-            border.color: parent && parent.activeFocus ? control.palette.highlight : control.palette.button
-            color: control.palette.base
+            border.color: parent && parent.activeFocus ? Default.focusColor : Default.buttonColor
         }
     }
 
     background: Rectangle {
-        implicitWidth: 140
+        implicitWidth: 120
         implicitHeight: 40
 
-        color: control.down ? control.palette.mid : control.palette.button
-        border.color: control.palette.highlight
+        color: !control.editable && control.visualFocus ? (control.pressed ? Default.focusPressedColor : Default.focusLightColor) :
+            (control.down || popup.visible ? Default.buttonPressedColor : Default.buttonColor)
+        border.color: Default.focusColor
         border.width: !control.editable && control.visualFocus ? 2 : 0
         visible: !control.flat || control.down
     }
@@ -118,8 +120,9 @@ T.ComboBox {
         contentItem: ListView {
             clip: true
             implicitHeight: contentHeight
-            model: control.delegateModel
+            model: control.popup.visible ? control.delegateModel : null
             currentIndex: control.highlightedIndex
+            highlightRangeMode: ListView.ApplyRange
             highlightMoveDuration: 0
 
             Rectangle {
@@ -127,7 +130,7 @@ T.ComboBox {
                 width: parent.width
                 height: parent.height
                 color: "transparent"
-                border.color: control.palette.mid
+                border.color: Default.frameLightColor
             }
 
             T.ScrollIndicator.vertical: ScrollIndicator { }

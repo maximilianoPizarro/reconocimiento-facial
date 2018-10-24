@@ -1,9 +1,19 @@
+  
+    
+#X_data = []
+#files = glob.glob ("C:/Users/Max/git/reconocimiento/resources/*.PNG")
+#for myFile in files:
+ #   print(myFile)
+  #  image = cv2.imread (myFile)
+   # X_data.append (image)
+###
+    
 #fuente http://ezequielaguilar.com.pa/data-science/reconocimiento-facial-utilizando-python-scikit-learn/
 
 #testeado con python 2.7.9
 #complementar el gestor de dependencias https://pip.pypa.io/en/stable/installing/
-#            curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-#            python get-pip.py
+#			curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+#			python get-pip.py
 #Descargar las siguientes librerias
 #python -m pip install scipy
 #python -m pip install scikit-learn   #actualizar si es necesario python -m pip install -U scikit-learn
@@ -18,7 +28,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 from sklearn.svm import SVC  #esto para importar el clasificador vectorial
 from sklearn.datasets import fetch_olivetti_faces   #de aca saco el dataset de imagenes del a libreria
-from sklearn.cross_validation import train_test_split #esto es para el test de comparacion
+from sklearn.model_selection import train_test_split #esto es para el test de comparacion
 from sklearn import metrics
 
 print('IPython version:', IPython.__version__)
@@ -33,7 +43,7 @@ glasses = [(10, 19), (30, 32), (37, 38), (50, 59), (63, 64),
            (194, 194), (196, 199), (260, 269), (270, 279), (300, 309),
            (330, 339), (358, 359), (360, 369)]
 
-#Pre: images coleccion de imagenes, target elemento imagen, top_n cantidad de elementos    
+#Pre: images coleccion de imagenes, target elemento imagen, top_n cantidad de elementos	
 #post: imprime las imagenes por pantalla
 
 def print_faces(images, target, top_n):
@@ -43,7 +53,7 @@ def print_faces(images, target, top_n):
     for i in range(top_n):
         # graficamos las imagenes en una matriz de 20x20
         p = fig.add_subplot(20, 20, i + 1, xticks=[], yticks=[])
-        p.imshow(images[i], cmap=plt.cm.bone)
+        p.imshow(images[i], cmap=plt.cm)
         # etiquetamos las imagenes con el valor objetivo (target value)
         p.text(0, 14, str(target[i]))
         p.text(0, 60, str(i))
@@ -77,13 +87,50 @@ def create_target(segments):
     # put 1 in the specified segments
     for (start, end) in segments:
         y[start:end + 1] = 1
-    return y    
+    return y	
 
 
 ###MAIN###
-    
+	
 #Importamos el dataset de rostros
 faces = fetch_olivetti_faces()
+
+#imprimimos propiedades del dataset faces.data contiene el puntero de la lista y faces.target la lista de imagenes en cuestion
+print(faces.DESCR)
+print(faces.keys())
+print(faces.images.shape)
+print(faces.data.shape)
+print(faces.target.shape)
+
+#No tenemos que escalar los atributos, porque ya se encuentran normalizados.
+print(np.max(faces.data))
+print(np.min(faces.data))
+print(np.mean(faces.data))		
+		
+#print_faces(faces.images, faces.target, 20)	#esto es para mostrar el dataset sin clasificar
+
+svc_3 = SVC(kernel='linear')  #esto es clasificador o Classifier cuyo modelos es un hiperplano que separa instancias (puntos) de una clase del resto
+
+#X_train, X_test, y_train, y_test = train_test_split(faces.data, faces.target, test_size=0.25, random_state=0) #Creamos los conjuntos train y test
+
+target_glasses = create_target(glasses)#cargo el conjunto con lentes
+X_train, X_test, y_train, y_test = train_test_split(faces.data, target_glasses, test_size=0.25, random_state=0)#Idem con el conjunto con lentes
+
+train_and_evaluate(svc_3, X_train, X_test, y_train, y_test)
+y_pred = svc_3.predict(X_test)
+
+eval_faces = [np.reshape(a, (64, 64)) for a in X_test]
+print_faces(eval_faces, y_pred, 10)
+
+plt.show() #esto es para abrir un frame donde se pegan las imagenes
+    
+print('X_data shape:', np.array(X_data).shape)
+
+###MAIN###
+localpath="reconocimiento/resources"  
+#Importamos el dataset de rostros
+faces = fetch_olivetti_faces(data_home=localpath, shuffle=False, random_state=0,
+                         download_if_missing=True)
 
 #imprimimos propiedades del dataset faces.data contiene el puntero de la lista y faces.target la lista de imagenes en cuestion
 print(faces.DESCR)
@@ -101,17 +148,17 @@ print(np.mean(faces.data))
 
 svc_3 = SVC(kernel='linear')  #esto es clasificador o Classifier cuyo modelos es un hiperplano que separa instancias (puntos) de una clase del resto
 
-#X_train, X_test, y_train, y_test = train_test_split(faces.data, faces.target, test_size=0.25, random_state=0) #Creamos los conjuntos train y test
+X_train, X_test, y_train, y_test = train_test_split(faces.data, faces.target, test_size=0.25, random_state=0) #Creamos los conjuntos train y test
 
 target_glasses = create_target(glasses)#cargo el conjunto con lentes
-X_train, X_test, y_train, y_test = train_test_split(faces.data, target_glasses, test_size=0.25, random_state=0)#Idem con el conjunto con lentes
+#X_train, X_test, y_train, y_test = train_test_split(X_data, np.array(X_data).shape, test_size=0.25, random_state=0)#Idem con el conjunto con lentes
 
 train_and_evaluate(svc_3, X_train, X_test, y_train, y_test)
 y_pred = svc_3.predict(X_test)
 
-eval_faces = [np.reshape(a, (64, 64)) for a in X_test]
+eval_faces = [np.reshape(a, (222, 222)) for a in X_test]
 print_faces(eval_faces, y_pred, 10)
-
+#print_faces(X_data, y_pred, 10)
 plt.show() #esto es para abrir un frame donde se pegan las imagenes
 
 

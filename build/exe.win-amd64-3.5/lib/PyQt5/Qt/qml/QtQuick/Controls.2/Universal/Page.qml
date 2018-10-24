@@ -34,17 +34,17 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.11
-import QtQuick.Templates 2.4 as T
-import QtQuick.Controls.Universal 2.4
+import QtQuick 2.9
+import QtQuick.Templates 2.2 as T
+import QtQuick.Controls.Universal 2.2
 
 T.Page {
     id: control
 
     implicitWidth: Math.max(background ? background.implicitWidth : 0,
-                            contentWidth + leftPadding + rightPadding,
-                            header && header.visible ? header.implicitWidth : 0,
-                            footer && footer.visible ? footer.implicitWidth : 0)
+                            Math.max(contentWidth,
+                                     header && header.visible ? header.implicitWidth : 0,
+                                     footer && footer.visible ? footer.implicitWidth : 0) + leftPadding + rightPadding)
     implicitHeight: Math.max(background ? background.implicitHeight : 0,
                              contentHeight + topPadding + bottomPadding
                              + (header && header.visible ? header.implicitHeight + spacing : 0)

@@ -182,11 +182,13 @@ Style {
             Loader {
                 id: indicatorLoader
                 sourceComponent: indicator
+                anchors.verticalCenter: parent.verticalCenter
             }
             Loader {
                 id: labelLoader
                 Layout.fillWidth: true
                 sourceComponent: label
+                anchors.verticalCenter: parent.verticalCenter
             }
         }
     }

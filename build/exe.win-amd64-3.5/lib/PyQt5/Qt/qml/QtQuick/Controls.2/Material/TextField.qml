@@ -34,12 +34,12 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.11
-import QtQuick.Templates 2.4 as T
-import QtQuick.Controls 2.4
-import QtQuick.Controls.impl 2.4
-import QtQuick.Controls.Material 2.4
-import QtQuick.Controls.Material.impl 2.4
+import QtQuick 2.9
+import QtQuick.Templates 2.2 as T
+import QtQuick.Controls 2.2
+import QtQuick.Controls.impl 2.2
+import QtQuick.Controls.Material 2.2
+import QtQuick.Controls.Material.impl 2.2
 
 T.TextField {
     id: control
@@ -77,10 +77,9 @@ T.TextField {
     }
 
     background: Rectangle {
-        y: control.height - height - control.bottomPadding + 8
+        y: control.height - height - control.bottomPadding / 2
         implicitWidth: 120
-        height: control.activeFocus || control.hovered ? 2 : 1
-        color: control.activeFocus ? control.Material.accentColor
-                                   : (control.hovered ? control.Material.primaryTextColor : control.Material.hintTextColor)
+        height: control.activeFocus ? 2 : 1
+        color: control.activeFocus ? control.Material.accentColor : control.Material.hintTextColor
     }
 }

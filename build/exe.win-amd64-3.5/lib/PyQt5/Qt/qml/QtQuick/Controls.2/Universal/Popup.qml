@@ -34,9 +34,9 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.11
-import QtQuick.Templates 2.4 as T
-import QtQuick.Controls.Universal 2.4
+import QtQuick 2.9
+import QtQuick.Templates 2.2 as T
+import QtQuick.Controls.Universal 2.2
 
 T.Popup {
     id: control
@@ -55,13 +55,5 @@ T.Popup {
         color: control.Universal.chromeMediumLowColor
         border.color: control.Universal.chromeHighColor
         border.width: 1 // FlyoutBorderThemeThickness
-    }
-
-    T.Overlay.modal: Rectangle {
-        color: control.Universal.baseLowColor
-    }
-
-    T.Overlay.modeless: Rectangle {
-        color: control.Universal.baseLowColor
     }
 }

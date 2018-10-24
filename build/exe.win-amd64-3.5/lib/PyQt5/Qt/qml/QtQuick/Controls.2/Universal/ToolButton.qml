@@ -34,11 +34,9 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.11
-import QtQuick.Templates 2.4 as T
-import QtQuick.Controls 2.4
-import QtQuick.Controls.impl 2.4
-import QtQuick.Controls.Universal 2.4
+import QtQuick 2.9
+import QtQuick.Templates 2.2 as T
+import QtQuick.Controls.Universal 2.2
 
 T.ToolButton {
     id: control
@@ -50,23 +48,18 @@ T.ToolButton {
     baselineOffset: contentItem.y + contentItem.baselineOffset
 
     padding: 6
-    spacing: 8
-
-    icon.width: 20
-    icon.height: 20
-    icon.color: Color.transparent(Universal.foreground, enabled ? 1.0 : 0.2)
 
     property bool useSystemFocusVisuals: true
 
-    contentItem: IconLabel {
-        spacing: control.spacing
-        mirrored: control.mirrored
-        display: control.display
-
-        icon: control.icon
+    contentItem: Text {
         text: control.text
         font: control.font
-        color: Color.transparent(control.Universal.foreground, enabled ? 1.0 : 0.2)
+        elide: Text.ElideRight
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+
+        opacity: enabled ? 1.0 : 0.2
+        color: control.Universal.foreground
     }
 
     background: Rectangle {

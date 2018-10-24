@@ -34,10 +34,10 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.11
-import QtQuick.Templates 2.4 as T
-import QtQuick.Controls.Material 2.4
-import QtQuick.Controls.Material.impl 2.4
+import QtQuick 2.9
+import QtQuick.Templates 2.2 as T
+import QtQuick.Controls.Material 2.2
+import QtQuick.Controls.Material.impl 2.2
 
 T.BusyIndicator {
     id: control
@@ -52,8 +52,8 @@ T.BusyIndicator {
         implicitHeight: 48
         color: control.Material.accentColor
 
-        running: control.running
         opacity: control.running ? 1 : 0
-        Behavior on opacity { OpacityAnimator { duration: 250 } }
+        visible: control.running || animator.running
+        Behavior on opacity { OpacityAnimator { id: animator; duration: 250 } }
     }
 }

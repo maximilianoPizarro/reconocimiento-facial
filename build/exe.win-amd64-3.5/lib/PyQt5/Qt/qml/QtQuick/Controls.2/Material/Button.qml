@@ -34,12 +34,10 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.11
-import QtQuick.Templates 2.4 as T
-import QtQuick.Controls 2.4
-import QtQuick.Controls.impl 2.4
-import QtQuick.Controls.Material 2.4
-import QtQuick.Controls.Material.impl 2.4
+import QtQuick 2.9
+import QtQuick.Templates 2.2 as T
+import QtQuick.Controls.Material 2.2
+import QtQuick.Controls.Material.impl 2.2
 
 T.Button {
     id: control
@@ -54,29 +52,20 @@ T.Button {
     padding: 12
     leftPadding: padding - 4
     rightPadding: padding - 4
-    spacing: 6
-
-    icon.width: 24
-    icon.height: 24
-    icon.color: !enabled ? Material.hintTextColor :
-        flat && highlighted ? Material.accentColor :
-        highlighted ? Material.primaryHighlightedTextColor : Material.foreground
 
     Material.elevation: flat ? control.down || control.hovered ? 2 : 0
                              : control.down ? 8 : 2
     Material.background: flat ? "transparent" : undefined
 
-    contentItem: IconLabel {
-        spacing: control.spacing
-        mirrored: control.mirrored
-        display: control.display
-
-        icon: control.icon
+    contentItem: Text {
         text: control.text
         font: control.font
         color: !control.enabled ? control.Material.hintTextColor :
             control.flat && control.highlighted ? control.Material.accentColor :
             control.highlighted ? control.Material.primaryHighlightedTextColor : control.Material.foreground
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+        elide: Text.ElideRight
     }
 
     // TODO: Add a proper ripple/ink effect for mouse/touch input and focus state

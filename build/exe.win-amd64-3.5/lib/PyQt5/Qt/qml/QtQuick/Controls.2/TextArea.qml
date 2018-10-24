@@ -34,10 +34,10 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.11
-import QtQuick.Controls 2.4
-import QtQuick.Controls.impl 2.4
-import QtQuick.Templates 2.4 as T
+import QtQuick 2.9
+import QtQuick.Controls 2.2
+import QtQuick.Controls.impl 2.2
+import QtQuick.Templates 2.2 as T
 
 T.TextArea {
     id: control
@@ -52,9 +52,9 @@ T.TextArea {
     padding: 6
     leftPadding: padding + 4
 
-    color: control.palette.text
-    selectionColor: control.palette.highlight
-    selectedTextColor: control.palette.highlightedText
+    color: enabled ? Default.textColor : Default.textDisabledLightColor
+    selectionColor: Default.textSelectionColor
+    selectedTextColor: color
 
     PlaceholderText {
         id: placeholder
@@ -65,8 +65,7 @@ T.TextArea {
 
         text: control.placeholderText
         font: control.font
-        opacity: 0.5
-        color: control.color
+        color: enabled ? Default.textPlaceholderColor : Default.textDisabledColor
         verticalAlignment: control.verticalAlignment
         visible: !control.length && !control.preeditText && (!control.activeFocus || control.horizontalAlignment !== Qt.AlignHCenter)
         elide: Text.ElideRight

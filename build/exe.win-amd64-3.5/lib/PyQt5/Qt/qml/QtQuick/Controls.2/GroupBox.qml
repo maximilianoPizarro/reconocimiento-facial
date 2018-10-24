@@ -34,10 +34,10 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.11
-import QtQuick.Controls 2.4
-import QtQuick.Controls.impl 2.4
-import QtQuick.Templates 2.4 as T
+import QtQuick 2.9
+import QtQuick.Controls 2.2
+import QtQuick.Controls.impl 2.2
+import QtQuick.Templates 2.2 as T
 
 T.GroupBox {
     id: control
@@ -60,17 +60,18 @@ T.GroupBox {
 
         text: control.title
         font: control.font
-        color: control.palette.windowText
+        color: control.enabled ? Default.textColor : Default.textDisabledColor
         elide: Text.ElideRight
+        horizontalAlignment: Text.AlignLeft
         verticalAlignment: Text.AlignVCenter
     }
 
     background: Rectangle {
-        y: control.topPadding - control.bottomPadding
+        y: control.topPadding - control.padding
         width: parent.width
-        height: parent.height - control.topPadding + control.bottomPadding
+        height: parent.height - control.topPadding + control.padding
 
         color: "transparent"
-        border.color: control.palette.mid
+        border.color: Default.frameLightColor
     }
 }

@@ -34,13 +34,12 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.11
+import QtQuick 2.9
 import QtQuick.Window 2.3
-import QtQuick.Controls 2.4
-import QtQuick.Controls.impl 2.4
-import QtQuick.Templates 2.4 as T
-import QtQuick.Controls.Material 2.4
-import QtQuick.Controls.Material.impl 2.4
+import QtQuick.Controls 2.2
+import QtQuick.Templates 2.2 as T
+import QtQuick.Controls.Material 2.2
+import QtQuick.Controls.Material.impl 2.2
 
 T.ComboBox {
     id: control
@@ -68,11 +67,12 @@ T.ComboBox {
         hoverEnabled: control.hoverEnabled
     }
 
-    indicator: ColorImage {
+    indicator: Image {
         x: control.mirrored ? control.padding : control.width - width - control.padding
         y: control.topPadding + (control.availableHeight - height) / 2
-        color: control.enabled ? control.Material.foreground : control.Material.hintTextColor
-        source: "qrc:/qt-project.org/imports/QtQuick/Controls.2/Material/images/drop-indicator.png"
+        source: "image://material/drop-indicator/" + (control.enabled ? control.Material.foreground : control.Material.hintTextColor)
+        sourceSize.width: width
+        sourceSize.height: height
     }
 
     contentItem: T.TextField {
@@ -84,7 +84,7 @@ T.ComboBox {
 
         enabled: control.editable
         autoScroll: control.editable
-        readOnly: control.down
+        readOnly: control.popup.visible
         inputMethodHints: control.inputMethodHints
         validator: control.validator
 
@@ -92,6 +92,7 @@ T.ComboBox {
         color: control.enabled ? control.Material.foreground : control.Material.hintTextColor
         selectionColor: control.Material.accentColor
         selectedTextColor: control.Material.primaryHighlightedTextColor
+        horizontalAlignment: Text.AlignLeft
         verticalAlignment: Text.AlignVCenter
 
         cursorDelegate: CursorDelegate { }
@@ -160,8 +161,9 @@ T.ComboBox {
         contentItem: ListView {
             clip: true
             implicitHeight: contentHeight
-            model: control.delegateModel
+            model: control.popup.visible ? control.delegateModel : null
             currentIndex: control.highlightedIndex
+            highlightRangeMode: ListView.ApplyRange
             highlightMoveDuration: 0
 
             T.ScrollIndicator.vertical: ScrollIndicator { }
@@ -169,7 +171,7 @@ T.ComboBox {
 
         background: Rectangle {
             radius: 2
-            color: parent.Material.dialogColor
+            color: control.popup.Material.dialogColor
 
             layer.enabled: control.enabled
             layer.effect: ElevationEffect {

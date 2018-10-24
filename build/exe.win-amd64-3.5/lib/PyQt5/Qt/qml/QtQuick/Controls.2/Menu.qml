@@ -34,10 +34,10 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.11
-import QtQuick.Controls 2.4
-import QtQuick.Controls.impl 2.4
-import QtQuick.Templates 2.4 as T
+import QtQuick 2.9
+import QtQuick.Controls 2.2
+import QtQuick.Controls.impl 2.2
+import QtQuick.Templates 2.2 as T
 
 T.Menu {
     id: control
@@ -48,9 +48,6 @@ T.Menu {
                              contentItem ? contentItem.implicitHeight : 0) + topPadding + bottomPadding
 
     margins: 0
-    overlap: 1
-
-    delegate: MenuItem { }
 
     contentItem: ListView {
         implicitHeight: contentHeight
@@ -58,7 +55,8 @@ T.Menu {
         // TODO: improve this?
         interactive: ApplicationWindow.window ? contentHeight > ApplicationWindow.window.height : false
         clip: true
-        currentIndex: control.currentIndex
+        keyNavigationWraps: false
+        currentIndex: -1
 
         ScrollIndicator.vertical: ScrollIndicator {}
     }
@@ -66,15 +64,7 @@ T.Menu {
     background: Rectangle {
         implicitWidth: 200
         implicitHeight: 40
-        color: control.palette.window
-        border.color: control.palette.dark
-    }
-
-    T.Overlay.modal: Rectangle {
-        color: Color.transparent(control.palette.shadow, 0.5)
-    }
-
-    T.Overlay.modeless: Rectangle {
-        color: Color.transparent(control.palette.shadow, 0.12)
+        color: Default.backgroundColor
+        border.color: Default.frameDarkColor
     }
 }

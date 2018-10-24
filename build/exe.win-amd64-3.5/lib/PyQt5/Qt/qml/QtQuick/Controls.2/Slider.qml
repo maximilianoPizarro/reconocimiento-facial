@@ -34,10 +34,10 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.11
-import QtQuick.Controls 2.4
-import QtQuick.Controls.impl 2.4
-import QtQuick.Templates 2.4 as T
+import QtQuick 2.9
+import QtQuick.Controls 2.2
+import QtQuick.Controls.impl 2.2
+import QtQuick.Templates 2.2 as T
 
 T.Slider {
     id: control
@@ -50,34 +50,33 @@ T.Slider {
     padding: 6
 
     handle: Rectangle {
-        x: control.leftPadding + (control.horizontal ? control.visualPosition * (control.availableWidth - width) : (control.availableWidth - width) / 2)
-        y: control.topPadding + (control.horizontal ? (control.availableHeight - height) / 2 : control.visualPosition * (control.availableHeight - height))
+        x: control.leftPadding + (horizontal ? control.visualPosition * (control.availableWidth - width) : (control.availableWidth - width) / 2)
+        y: control.topPadding + (horizontal ? (control.availableHeight - height) / 2 : control.visualPosition * (control.availableHeight - height))
         implicitWidth: 28
         implicitHeight: 28
         radius: width / 2
-        color: control.pressed ? control.palette.light : control.palette.window
+        color: control.enabled ? (control.pressed
+            ? (control.visualFocus ? Default.focusPressedColor : Default.indicatorPressedColor)
+            : (control.visualFocus ? Default.focusLightColor : Default.backgroundColor)) : Default.indicatorDisabledColor
         border.width: control.visualFocus ? 2 : 1
-        border.color: control.visualFocus ? control.palette.highlight : control.enabled ? control.palette.mid : control.palette.midlight
+        border.color: control.enabled ? (control.visualFocus
+            ? Default.focusColor
+            : (control.pressed ? Default.indicatorFramePressedColor : Default.indicatorFrameColor)) : Default.indicatorFrameDisabledColor
+
+        readonly property bool horizontal: control.orientation === Qt.Horizontal
     }
 
     background: Rectangle {
-        x: control.leftPadding + (control.horizontal ? 0 : (control.availableWidth - width) / 2)
-        y: control.topPadding + (control.horizontal ? (control.availableHeight - height) / 2 : 0)
-        implicitWidth: control.horizontal ? 200 : 6
-        implicitHeight: control.horizontal ? 6 : 200
-        width: control.horizontal ? control.availableWidth : implicitWidth
-        height: control.horizontal ? implicitHeight : control.availableHeight
+        x: control.leftPadding + (horizontal ? 0 : (control.availableWidth - width) / 2)
+        y: control.topPadding + (horizontal ? (control.availableHeight - height) / 2 : 0)
+        implicitWidth: horizontal ? 200 : 6
+        implicitHeight: horizontal ? 6 : 200
+        width: horizontal ? control.availableWidth : implicitWidth
+        height: horizontal ? implicitHeight : control.availableHeight
         radius: 3
-        color: control.palette.midlight
-        scale: control.horizontal && control.mirrored ? -1 : 1
+        color: Default.buttonColor
+        scale: horizontal && control.mirrored ? -1 : 1
 
-        Rectangle {
-            y: control.horizontal ? 0 : control.visualPosition * parent.height
-            width: control.horizontal ? control.position * parent.width : 6
-            height: control.horizontal ? 6 : control.position * parent.height
-
-            radius: 3
-            color: control.palette.dark
-        }
+        readonly property bool horizontal: control.orientation === Qt.Horizontal
     }
 }

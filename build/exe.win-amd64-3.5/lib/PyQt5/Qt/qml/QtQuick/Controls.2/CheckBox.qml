@@ -34,10 +34,10 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.11
-import QtQuick.Templates 2.4 as T
-import QtQuick.Controls 2.4
-import QtQuick.Controls.impl 2.4
+import QtQuick 2.9
+import QtQuick.Templates 2.2 as T
+import QtQuick.Controls 2.2
+import QtQuick.Controls.impl 2.2
 
 T.CheckBox {
     id: control
@@ -52,43 +52,23 @@ T.CheckBox {
     padding: 6
     spacing: 6
 
-    // keep in sync with CheckDelegate.qml (shared CheckIndicator.qml was removed for performance reasons)
-    indicator: Rectangle {
-        implicitWidth: 28
-        implicitHeight: 28
-
+    indicator: CheckIndicator {
         x: text ? (control.mirrored ? control.width - width - control.rightPadding : control.leftPadding) : control.leftPadding + (control.availableWidth - width) / 2
         y: control.topPadding + (control.availableHeight - height) / 2
-
-        color: control.down ? control.palette.light : control.palette.base
-        border.width: control.visualFocus ? 2 : 1
-        border.color: control.visualFocus ? control.palette.highlight : control.palette.mid
-
-        ColorImage {
-            x: (parent.width - width) / 2
-            y: (parent.height - height) / 2
-            defaultColor: "#353637"
-            color: control.palette.text
-            source: "qrc:/qt-project.org/imports/QtQuick/Controls.2/images/check.png"
-            visible: control.checkState === Qt.Checked
-        }
-
-        Rectangle {
-            x: (parent.width - width) / 2
-            y: (parent.height - height) / 2
-            width: 16
-            height: 3
-            color: control.palette.text
-            visible: control.checkState === Qt.PartiallyChecked
-        }
+        control: control
     }
 
-    contentItem: CheckLabel {
+    contentItem: Text {
         leftPadding: control.indicator && !control.mirrored ? control.indicator.width + control.spacing : 0
         rightPadding: control.indicator && control.mirrored ? control.indicator.width + control.spacing : 0
 
         text: control.text
         font: control.font
-        color: control.palette.windowText
+        color: control.down ? Default.textDarkColor : Default.textColor
+        elide: Text.ElideRight
+        visible: control.text
+        horizontalAlignment: Text.AlignLeft
+        verticalAlignment: Text.AlignVCenter
+        opacity: enabled ? 1 : 0.3
     }
 }

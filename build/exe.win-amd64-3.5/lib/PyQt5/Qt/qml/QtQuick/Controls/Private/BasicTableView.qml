@@ -348,8 +348,6 @@ ScrollView {
         }
     }
 
-    activeFocusOnTab: true
-
     implicitWidth: 200
     implicitHeight: 150
 

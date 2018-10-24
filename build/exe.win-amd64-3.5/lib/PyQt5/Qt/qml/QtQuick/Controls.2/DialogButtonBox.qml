@@ -34,8 +34,8 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.11
-import QtQuick.Templates 2.4 as T
+import QtQuick 2.9
+import QtQuick.Templates 2.2 as T
 
 T.DialogButtonBox {
     id: control
@@ -54,7 +54,7 @@ T.DialogButtonBox {
     }
 
     contentItem: ListView {
-        implicitWidth: control.count === 1 ? 200 : contentWidth
+        implicitWidth: contentWidth
         implicitHeight: 40
 
         model: control.contentModel
@@ -69,6 +69,5 @@ T.DialogButtonBox {
         x: 1; y: 1
         width: parent.width - 2
         height: parent.height - 2
-        color: control.palette.window
     }
 }

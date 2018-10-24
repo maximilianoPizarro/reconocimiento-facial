@@ -34,12 +34,11 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.11
-import QtQuick.Templates 2.4 as T
-import QtQuick.Controls 2.4
-import QtQuick.Controls.impl 2.4
-import QtQuick.Controls.Material 2.4
-import QtQuick.Controls.Material.impl 2.4
+import QtQuick 2.9
+import QtQuick.Templates 2.2 as T
+import QtQuick.Controls 2.2
+import QtQuick.Controls.Material 2.2
+import QtQuick.Controls.Material.impl 2.2
 
 T.Dialog {
     id: control
@@ -102,15 +101,5 @@ T.Dialog {
 
     footer: DialogButtonBox {
         visible: count > 0
-    }
-
-    T.Overlay.modal: Rectangle {
-        color: control.Material.backgroundDimColor
-        Behavior on opacity { NumberAnimation { duration: 150 } }
-    }
-
-    T.Overlay.modeless: Rectangle {
-        color: control.Material.backgroundDimColor
-        Behavior on opacity { NumberAnimation { duration: 150 } }
     }
 }

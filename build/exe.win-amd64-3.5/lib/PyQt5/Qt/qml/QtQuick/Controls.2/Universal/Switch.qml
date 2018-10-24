@@ -34,10 +34,10 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.11
-import QtQuick.Templates 2.4 as T
-import QtQuick.Controls.Universal 2.4
-import QtQuick.Controls.Universal.impl 2.4
+import QtQuick 2.9
+import QtQuick.Templates 2.2 as T
+import QtQuick.Controls.Universal 2.2
+import QtQuick.Controls.Universal.impl 2.2
 
 T.Switch {
     id: control
@@ -67,6 +67,8 @@ T.Switch {
         text: control.text
         font: control.font
         elide: Text.ElideRight
+        visible: control.text
+        horizontalAlignment: Text.AlignLeft
         verticalAlignment: Text.AlignVCenter
 
         opacity: enabled ? 1.0 : 0.2

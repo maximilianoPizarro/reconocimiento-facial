@@ -34,12 +34,10 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.11
-import QtQuick.Templates 2.4 as T
-import QtQuick.Controls 2.4
-import QtQuick.Controls.impl 2.4
-import QtQuick.Controls.Material 2.4
-import QtQuick.Controls.Material.impl 2.4
+import QtQuick 2.9
+import QtQuick.Templates 2.2 as T
+import QtQuick.Controls.Material 2.2
+import QtQuick.Controls.Material.impl 2.2
 
 T.MenuItem {
     id: control
@@ -56,43 +54,24 @@ T.MenuItem {
     bottomPadding: 12
     spacing: 16
 
-    icon.width: 24
-    icon.height: 24
-    icon.color: enabled ? Material.foreground : Material.hintTextColor
-
     indicator: CheckIndicator {
         x: text ? (control.mirrored ? control.width - width - control.rightPadding : control.leftPadding) : control.leftPadding + (control.availableWidth - width) / 2
         y: control.topPadding + (control.availableHeight - height) / 2
         visible: control.checkable
         control: control
-        checkState: control.checked ? Qt.Checked : Qt.Unchecked
     }
 
-    arrow: ColorImage {
-        x: control.mirrored ? control.padding : control.width - width - control.padding
-        y: control.topPadding + (control.availableHeight - height) / 2
+    contentItem: Text {
+        leftPadding: control.checkable && !control.mirrored ? control.indicator.width + control.spacing : 0
+        rightPadding: control.checkable && control.mirrored ? control.indicator.width + control.spacing : 0
 
-        visible: control.subMenu
-        mirror: control.mirrored
-        color: control.enabled ? control.Material.foreground : control.Material.hintTextColor
-        source: "qrc:/qt-project.org/imports/QtQuick/Controls.2/Material/images/arrow-indicator.png"
-    }
-
-    contentItem: IconLabel {
-        readonly property real arrowPadding: control.subMenu && control.arrow ? control.arrow.width + control.spacing : 0
-        readonly property real indicatorPadding: control.checkable && control.indicator ? control.indicator.width + control.spacing : 0
-        leftPadding: !control.mirrored ? indicatorPadding : arrowPadding
-        rightPadding: control.mirrored ? indicatorPadding : arrowPadding
-
-        spacing: control.spacing
-        mirrored: control.mirrored
-        display: control.display
-        alignment: Qt.AlignLeft
-
-        icon: control.icon
         text: control.text
         font: control.font
         color: control.enabled ? control.Material.foreground : control.Material.hintTextColor
+        elide: Text.ElideRight
+        visible: control.text
+        horizontalAlignment: Text.AlignLeft
+        verticalAlignment: Text.AlignVCenter
     }
 
     background: Rectangle {
@@ -107,7 +86,7 @@ T.MenuItem {
             clip: visible
             pressed: control.pressed
             anchor: control
-            active: control.down || control.highlighted
+            active: control.down || control.visualFocus || control.hovered
             color: control.Material.rippleColor
         }
     }

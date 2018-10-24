@@ -34,10 +34,10 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.11
-import QtQuick.Controls 2.4
-import QtQuick.Controls.impl 2.4
-import QtQuick.Templates 2.4 as T
+import QtQuick 2.9
+import QtQuick.Controls 2.2
+import QtQuick.Controls.impl 2.2
+import QtQuick.Templates 2.2 as T
 
 T.ScrollBar {
     id: control
@@ -51,24 +51,26 @@ T.ScrollBar {
     visible: control.policy !== T.ScrollBar.AlwaysOff
 
     contentItem: Rectangle {
+        id: handle
+
         implicitWidth: control.interactive ? 6 : 2
         implicitHeight: control.interactive ? 6 : 2
 
         radius: width / 2
-        color: control.pressed ? control.palette.dark : control.palette.mid
+        color: control.pressed ? Default.scrollBarPressedColor : Default.scrollBarColor
         opacity: 0.0
 
         states: State {
             name: "active"
             when: control.policy === T.ScrollBar.AlwaysOn || (control.active && control.size < 1.0)
-            PropertyChanges { target: control.contentItem; opacity: 0.75 }
+            PropertyChanges { target: handle; opacity: 0.75 }
         }
 
         transitions: Transition {
             from: "active"
             SequentialAnimation {
                 PauseAnimation { duration: 450 }
-                NumberAnimation { target: control.contentItem; duration: 200; property: "opacity"; to: 0.0 }
+                NumberAnimation { target: handle; duration: 200; property: "opacity"; to: 0.0 }
             }
         }
     }

@@ -34,10 +34,10 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.11
-import QtQuick.Controls 2.4
-import QtQuick.Controls.impl 2.4
-import QtQuick.Templates 2.4 as T
+import QtQuick 2.9
+import QtQuick.Controls 2.2
+import QtQuick.Controls.impl 2.2
+import QtQuick.Templates 2.2 as T
 
 T.DelayButton {
     id: control
@@ -58,50 +58,69 @@ T.DelayButton {
         }
     }
 
-    contentItem: ItemGroup {
-        ClippedText {
+    contentItem: Item {
+        implicitWidth: label.implicitWidth
+        implicitHeight: label.implicitHeight
+
+        Item {
+            x: -control.leftPadding + (control.progress * control.width)
+            width: (1.0 - control.progress) * control.width
+            height: parent.height
+
             clip: control.progress > 0
-            clipX: -control.leftPadding + control.progress * control.width
-            clipWidth: (1.0 - control.progress) * control.width
             visible: control.progress < 1
 
-            text: control.text
-            font: control.font
-            opacity: enabled ? 1 : 0.3
-            color: control.palette.buttonText
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-            elide: Text.ElideRight
+            Text {
+                id: label
+                x: -parent.x
+                width: control.availableWidth
+                height: parent.height
+
+                text: control.text
+                font: control.font
+                opacity: enabled ? 1 : 0.3
+                color: control.visualFocus ? Default.focusColor : (control.down ? Default.textDarkColor : Default.textColor)
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                elide: Text.ElideRight
+            }
         }
 
-        ClippedText {
+        Item {
+            x: -control.leftPadding
+            width: control.progress * control.width
+            height: parent.height
+
             clip: control.progress > 0
-            clipX: -control.leftPadding
-            clipWidth: control.progress * control.width
             visible: control.progress > 0
 
-            text: control.text
-            font: control.font
-            opacity: enabled ? 1 : 0.3
-            color: control.palette.brightText
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-            elide: Text.ElideRight
+            Text {
+                x: control.leftPadding
+                width: control.availableWidth
+                height: parent.height
+
+                text: control.text
+                font: control.font
+                opacity: enabled ? 1 : 0.3
+                color: Default.textLightColor
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                elide: Text.ElideRight
+            }
         }
     }
 
     background: Rectangle {
         implicitWidth: 100
         implicitHeight: 40
-        color: Color.blend(control.palette.button, control.palette.mid, control.down ? 0.5 : 0.0)
-        border.color: control.palette.highlight
+        color: control.visualFocus ? (control.down ? Default.focusPressedColor : Default.focusLightColor) : (control.down ? Default.buttonPressedColor : Default.buttonColor)
+        border.color: Default.focusColor
         border.width: control.visualFocus ? 2 : 0
 
-        PaddedRectangle {
-            padding: control.visualFocus ? 2 : 0
+        Rectangle {
             width: control.progress * parent.width
             height: parent.height
-            color: Color.blend(control.palette.dark, control.palette.mid, control.down ? 0.5 : 0.0)
+            color: control.visualFocus ? (control.down ? Default.buttonCheckedFocusColor : Default.focusColor) : (control.down ? Default.buttonCheckedPressedColor : Default.textColor)
         }
     }
 }

@@ -34,9 +34,9 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.11
-import QtQuick.Templates 2.4 as T
-import QtQuick.Controls.Material 2.4
+import QtQuick 2.9
+import QtQuick.Templates 2.2 as T
+import QtQuick.Controls.Material 2.2
 
 T.ScrollBar {
     id: control
@@ -50,6 +50,8 @@ T.ScrollBar {
     visible: control.policy !== T.ScrollBar.AlwaysOff
 
     contentItem: Rectangle {
+        id: handle
+
         implicitWidth: control.interactive ? 13 : 4
         implicitHeight: control.interactive ? 13 : 4
 

@@ -34,11 +34,9 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.11
-import QtQuick.Templates 2.4 as T
-import QtQuick.Controls 2.4
-import QtQuick.Controls.impl 2.4
-import QtQuick.Controls.Universal 2.4
+import QtQuick 2.9
+import QtQuick.Templates 2.2 as T
+import QtQuick.Controls.Universal 2.2
 
 T.SwipeDelegate {
     id: control
@@ -56,22 +54,21 @@ T.SwipeDelegate {
     topPadding: padding - 1
     bottomPadding: padding + 1
 
-    icon.width: 20
-    icon.height: 20
-    icon.color: Color.transparent(Universal.foreground, enabled ? 1.0 : 0.2)
-
     swipe.transition: Transition { SmoothedAnimation { velocity: 3; easing.type: Easing.InOutCubic } }
 
-    contentItem: IconLabel {
-        spacing: control.spacing
-        mirrored: control.mirrored
-        display: control.display
-        alignment: control.display === IconLabel.IconOnly || control.display === IconLabel.TextUnderIcon ? Qt.AlignCenter : Qt.AlignLeft
+    contentItem: Text {
+        leftPadding: !control.mirrored ? (control.indicator ? control.indicator.width : 0) + control.spacing : 0
+        rightPadding: control.mirrored ? (control.indicator ? control.indicator.width : 0) + control.spacing : 0
 
-        icon: control.icon
         text: control.text
         font: control.font
-        color: Color.transparent(control.Universal.foreground, enabled ? 1.0 : 0.2)
+        elide: Text.ElideRight
+        visible: control.text
+        horizontalAlignment: Text.AlignLeft
+        verticalAlignment: Text.AlignVCenter
+
+        opacity: enabled ? 1.0 : 0.2
+        color: control.Universal.foreground
     }
 
     background: Rectangle {
