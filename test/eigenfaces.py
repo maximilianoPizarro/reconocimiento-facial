@@ -6,14 +6,19 @@ import os
 import numpy as np
 from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
+import sklearn as sk
 from sklearn.svm import SVC  #esto para importar el clasificador vectorial
 from sklearn import metrics
 from sklearn.model_selection import GridSearchCV
+from sklearn.decomposition import PCA
+from sklearn.datasets.base import Bunch
+
 
 
 #there is no label 0 in our training data so subject name for index/label 0 is empty
 subjects = ["", "Max Pizarro", "Mateo Decu"]
 svc_3 = SVC(kernel='linear')  #esto es clasificador o Classifier cuyo modelos es un hiperplano que separa instancias (puntos) de una clase del resto
+clf = SVC(gamma=0.001, C=100.)
 
 def train_and_evaluate(clf, X_train, X_test, y_train, y_test):
     
@@ -150,6 +155,19 @@ print("Data prepared")
 print("Total faces: ", len(faces))
 print("Total labels: ", len(labels))    
 
+bidimensional=[]
+bidimensional.append(np.asarray(faces))
+bidimensional.append(faces)
+
+rostros=Bunch(DESCR="descripcion dataset", keys=['target', 'DESCR', 'data', 'images'],
+            images=bidimensional,data=len(faces),target=np.asarray(faces))
+
+#imprimimos propiedades del dataset faces.data contiene el puntero de la lista y faces.target la lista de imagenes en cuestion
+print(rostros.DESCR)
+print(rostros.keys())
+print(rostros.images.shape)
+print(rostros.data)
+print(rostros.target.shape)
 	
 #create our LBPH face recognizer 
 #face_recognizer = cv2.face.createLBPHFaceRecognizer()
@@ -161,7 +179,6 @@ print("Total labels: ", len(labels))
 #face_recognizer = cv2.face.createFisherFaceRecognizer()
 
 #train our face recognizer of our training faces
-X_train, X_test, y_train, y_test=train_test_split(faces, np.array(labels), test_size=0.25, random_state=42)
 #train_and_evaluate(svc_3, X_train, X_test, y_train, y_test)	
 #function to draw rectangle on image 
 #according to given (x, y) coordinates and 
@@ -186,10 +203,10 @@ def predict(test_img):
    # face, rect = detect_face(img)
     #predict the image using our face recognizer 
     
-    label= clf.predict(img)
+    label= svc_3.predict(img)
     #get name of respective label returned by face recognizer
     label_text = subjects[label]
-     
+
     #draw a rectangle around face detected
    # draw_rectangle(img, rect)
     #draw name of predicted person
@@ -202,12 +219,15 @@ print("Predicting images...")
  
 #load test images
 test_img1 = cv2.imread("../resources/s1/maxi.png")
+#plt.imshow(test_img1)
+#plt.show()
 test_img2 = cv2.imread("../resources/s2/mateo.png")
+#predicted_img1 = predict(test_img1)
 
-
+#X_train, X_test, y_train, y_test=train_test_split(faces, np.array(labels), test_size=0.25, random_state=42)
  
 #perform a prediction
-train_and_evaluate(svc_3, X_train, X_test, y_train, y_test)
+#train_and_evaluate(svc_3, X_train, X_test, y_train, y_test)
 #y_pred = svc_3.predict(X_test)
 
 #train_and_evaluate(svc_3, X_train, X_test, test_img2, y_test)
@@ -215,8 +235,23 @@ train_and_evaluate(svc_3, X_train, X_test, y_train, y_test)
 ##predicted_img2 = predict(test_img2)
 print("Prediction complete")
 
-plt.show() #esto es para abrir un frame donde se pegan las imagenes
+ #esto es para abrir un frame donde se pegan las imagenes
 
+
+pca = PCA(n_components=150, whiten=True)
+pca.fit(rostros)
+
+#plt.imshow(pca.mean_.reshape(faces.images[0].shape),
+ #          cmap=plt.cm.bone)
+
+
+
+#fig = plt.figure(figsize=(16, 6))
+#for i in range(30):
+ #   ax = fig.add_subplot(3, 10, i + 1, xticks=[], yticks=[])
+  #  ax.imshow(pca.components_[i].reshape(faces.images[0].shape),
+   #           cmap=plt.cm.bone)
+    
 #display both images
 ##cv2.imshow(subjects[1], predicted_img1)
 ##cv2.imshow(subjects[2], predicted_img2)
