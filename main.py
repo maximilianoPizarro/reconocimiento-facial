@@ -17,13 +17,24 @@ import threading
 import queue
 #from resources import pyside_uicfix 
 import os
+import pickle
+from random import choice
 
 running = False
 capture_thread = None
 #form_class = loadUiType("simple.ui")[0]
 q = queue.Queue()
-cascPath = "resources/haarcascade_frontalface_default.xml"
-font = cv2.cv2.FONT_HERSHEY_SIMPLEX
+face_cascade = cv2.CascadeClassifier('resources/data/haarcascade_frontalface_alt2.xml')
+eye_cascade = cv2.CascadeClassifier('resources/data/haarcascade_eye.xml')
+smile_cascade = cv2.CascadeClassifier('resources/data/haarcascade_smile.xml')
+
+recognizer = cv2.face.LBPHFaceRecognizer_create()
+recognizer.read("recognizers/face-trainner.yml")
+
+labels = {"person_name": 1}
+with open("pickles/face-labels.pickle", 'rb') as f:
+	og_labels = pickle.load(f)
+	labels = {v:k for k,v in og_labels.items()}
 
 def grab(cam, queue, width, height, fps):
     global running
@@ -68,7 +79,9 @@ class MyWindowClass(QtWidgets.QMainWindow):
         uic.loadUi("view/mainwindow.ui",self)
         #self.setupUi(self)
         self.startButton.clicked.connect(self.start_clicked)
-        self.pushButton.clicked.connect(self.pushButton_clicked)
+        self.pushButton.clicked.connect(self.agregar_foto)
+        self.pushButton_2.clicked.connect(self.entrenar)
+        self.pushButton_3.clicked.connect(self.detener)
         
         self.window_width = self.ImgWidget.frameSize().width()
         self.window_height = self.ImgWidget.frameSize().height()
@@ -98,20 +111,20 @@ class MyWindowClass(QtWidgets.QMainWindow):
         self.startButton.setEnabled(False)
         self.startButton.setText('Inciando...')
         
-    def pushButton_clicked(self):
+    def agregar_foto(self):
         #self.nameText.setText("safa")   set texto
         #print(self.nameText.text())    get texto
         if not q.empty():
                 if str(self.mensajeLabel.text())!="":
-                    
-                        img_name = self.nameText.text()+".png".format(0)
+                        os.makedirs("images/"+self.nameText.text(), exist_ok=True)    
+                            
+                        img_name =choice("abcde")+"-img.png".format(0)
                         frame = q.get()
                         img = frame["img"]        
                         #cv2.imwrite(os.path.join('resources' , img_name), img)
-                        faceCascade = cv2.cv2.CascadeClassifier(cascPath)
                         
                         gray = cv2.cv2.cvtColor(img, cv2.cv2.COLOR_BGR2GRAY)   
-                        faces = faceCascade.detectMultiScale(
+                        faces = face_cascade.detectMultiScale(
                                 gray,
                                 scaleFactor=1.1,
                                 minNeighbors=5,
@@ -120,16 +133,19 @@ class MyWindowClass(QtWidgets.QMainWindow):
                         # Draw a rectangle around the faces
                         for (x, y, w, h) in faces:
                             roi = img[y:y+h, x:x+w]
-                            cv2.cv2.imwrite(os.path.join('resources' , img_name), roi)
+                            cv2.cv2.imwrite(os.path.join("images/"+self.nameText.text() , img_name), roi)
                         self.mensajeLabel.setText("Agregado exitosamente!")
                 else:
-                    self.mensajeLabel.setText("complete el nombre")   
+                    self.mensajeLabel.setText("")   
         else:
-                self.mensajeLabel.setText("iniciar camara")    
+                self.mensajeLabel.setText("iniciar camara")  
+                
+    def entrenar(self):
+        os.system("python faces-train.py")            
         
     def update_frame(self):
         if not q.empty():
-            self.startButton.setText('Live')
+            self.startButton.setText('Iniciado')
             frame = q.get()
             img = frame["img"]
 
@@ -148,11 +164,10 @@ class MyWindowClass(QtWidgets.QMainWindow):
             image = QtGui.QImage(img.data, width, height, bpl, QtGui.QImage.Format_RGB888)
             self.ImgWidget.setImage(image)
             
-            faceCascade = cv2.cv2.CascadeClassifier(cascPath)
             # Capture frame-by-frame
             
             gray = cv2.cv2.cvtColor(img, cv2.cv2.COLOR_BGR2GRAY)   
-            faces = faceCascade.detectMultiScale(
+            faces = face_cascade.detectMultiScale(
                     gray,
                     scaleFactor=1.1,
                     minNeighbors=5,
@@ -162,12 +177,29 @@ class MyWindowClass(QtWidgets.QMainWindow):
             # Draw a rectangle around the faces
             for (x, y, w, h) in faces:
                 cv2.cv2.rectangle(img, (x, y), (x+w, y+h), (0, 255, 0), 2)
+                roi_gray = gray[y:y+h, x:x+w]
+                roi_color = img[y:y+h, x:x+w]
+                id_,conf = recognizer.predict(roi_gray)
+                if conf>=4 and conf <= 85:
+                		#print(5: #id_)
+                		#print(labels[id_])
+                		font = cv2.FONT_HERSHEY_SIMPLEX
+                		name = labels[id_]
+                		color = (255, 255, 255)
+                		stroke = 2
+                		cv2.cv2.putText(img, name, (x,y), font, 1, color, stroke, cv2.cv2.LINE_AA)
+                img_item = "7.png"
+                cv2.cv2.imwrite(img_item, roi_color)
 
                 #cv2.putText(img, 'This one!', (x+w, y+h), font, 0.8, (0, 255, 0), 2, cv2.LINE_AA)
 
     def closeEvent(self, event):
         global running
         running = False
+        
+    def detener(self):
+        if capture_thread.is_alive():
+            capture_thread._delete()
     
     def close_application(self):
         global running

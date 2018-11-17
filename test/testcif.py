@@ -18,7 +18,7 @@ def entrenamiento_evaluacion():
     from sklearn.model_selection import train_test_split
     X_train, X_test, y_train, y_test = train_test_split(faces.data,faces.target, random_state=0)    
     #print(X_train.shape, X_test.shape)
-    return X_train, y_train,X_test
+    return X_train, y_train,X_test,y_test
 
 def imprimir_rostros(images, target, top_n):
     # configuramos el tamanio de las imagenes por pulgadas
@@ -34,18 +34,17 @@ def imprimir_rostros(images, target, top_n):
     
 faces = datasets.fetch_olivetti_faces()
 #faces.data.shape
-#print(faces.DESCR)
-#print(faces.keys())
+print(faces.DESCR)
+print(faces.keys())
 print(faces.images.shape)
-#print(faces.data.shape)
-#print(faces.target.shape)
-#print (faces.target)
+print(faces.data.shape)
+print(faces.target.shape)
 
-x_entrenamiento, y_evaluacion,x_evaluacion=entrenamiento_evaluacion()
+x_entrenamiento, y_entrenamiento,x_evaluacion,y_evaluacion=entrenamiento_evaluacion()
 
-svc_3.fit(x_entrenamiento,y_evaluacion)
+svc_3.fit(x_entrenamiento,y_entrenamiento)
 y_pred = svc_3.predict(x_entrenamiento)
-print(x_evaluacion.shape)
+#print(x_evaluacion.shape)
 
 eval_faces = [np.reshape(a, (64, 64)) for a in x_evaluacion]
 imprimir_rostros(eval_faces, y_pred, 10)

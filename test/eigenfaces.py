@@ -78,7 +78,7 @@ def prepare_training_data(data_folder_path):
         #------STEP-1--------
         #get the directories (one directory for each subject) in data folder
         dirs = os.listdir(data_folder_path)
-        print(dirs)
+        #print(dirs)
          
         #list to hold all subject faces
         faces = []
@@ -155,17 +155,18 @@ print("Data prepared")
 print("Total faces: ", len(faces))
 print("Total labels: ", len(labels))    
 
-bidimensional=[]
-bidimensional.append(np.asarray(faces))
-bidimensional.append(faces)
+
+
+#eval_faces = [np.reshape(a, (64, 64)) for a in faces]
+
 
 rostros=Bunch(DESCR="descripcion dataset", keys=['target', 'DESCR', 'data', 'images'],
-            images=bidimensional,data=len(faces),target=np.asarray(faces))
+            images=faces,data=len(faces),target=np.asarray(faces))
 
 #imprimimos propiedades del dataset faces.data contiene el puntero de la lista y faces.target la lista de imagenes en cuestion
 print(rostros.DESCR)
 print(rostros.keys())
-print(rostros.images.shape)
+print(rostros.images)
 print(rostros.data)
 print(rostros.target.shape)
 	
@@ -224,9 +225,12 @@ test_img1 = cv2.imread("../resources/s1/maxi.png")
 test_img2 = cv2.imread("../resources/s2/mateo.png")
 #predicted_img1 = predict(test_img1)
 
-#X_train, X_test, y_train, y_test=train_test_split(faces, np.array(labels), test_size=0.25, random_state=42)
+X_train, X_test, y_train, y_test=train_test_split(faces, labels, random_state=0)
  
 #perform a prediction
+
+svc_3.fit(X_train,y_train)
+#y_pred = svc_3.predict(X_train)
 #train_and_evaluate(svc_3, X_train, X_test, y_train, y_test)
 #y_pred = svc_3.predict(X_test)
 
@@ -238,8 +242,6 @@ print("Prediction complete")
  #esto es para abrir un frame donde se pegan las imagenes
 
 
-pca = PCA(n_components=150, whiten=True)
-pca.fit(rostros)
 
 #plt.imshow(pca.mean_.reshape(faces.images[0].shape),
  #          cmap=plt.cm.bone)

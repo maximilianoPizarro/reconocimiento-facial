@@ -20,6 +20,9 @@ from sklearn.svm import SVC  #esto para importar el clasificador vectorial
 from sklearn.datasets import fetch_olivetti_faces   #de aca saco el dataset de imagenes del a libreria
 from sklearn.model_selection import train_test_split #esto es para el test de comparacion
 from sklearn import metrics
+import cv2.cv2
+from skimage import img_as_float,data
+
 
 print('IPython version:', IPython.__version__)
 print('numpy version:', np.__version__)
@@ -109,7 +112,9 @@ X_train, X_test, y_train, y_test = train_test_split(faces.data, target_glasses, 
 train_and_evaluate(svc_3, X_train, X_test, y_train, y_test)
 y_pred = svc_3.predict(X_test)
 
+
 eval_faces = [np.reshape(a, (64, 64)) for a in X_test]
 print_faces(eval_faces, y_pred, 10)
 
-plt.show() #esto es para abrir un frame donde se pegan las imagenes
+
+#plt.show() #esto es para abrir un frame donde se pegan las imagenes
