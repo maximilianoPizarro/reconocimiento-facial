@@ -118,27 +118,28 @@ class MyWindowClass(QtWidgets.QMainWindow):
                 if str(self.mensajeLabel.text())!="":
                         os.makedirs("images/"+self.nameText.text(), exist_ok=True)    
                             
-                        img_name =choice("abcde")+"-img.png".format(0)
+                        img_name =choice("abcde")+".jpg".format(0)
                         frame = q.get()
                         img = frame["img"]        
                         #cv2.imwrite(os.path.join('resources' , img_name), img)
-                        
-                        gray = cv2.cv2.cvtColor(img, cv2.cv2.COLOR_BGR2GRAY)   
-                        faces = face_cascade.detectMultiScale(
-                                gray,
-                                scaleFactor=1.1,
-                                minNeighbors=5,
-                                minSize=(30, 30)
-                            )                        
-                        # Draw a rectangle around the faces
-                        for (x, y, w, h) in faces:
-                            roi = img[y:y+h, x:x+w]
-                            cv2.cv2.imwrite(os.path.join("images/"+self.nameText.text() , img_name), roi)
+                        cv2.cv2.imwrite(os.path.join("images/"+self.nameText.text() , img_name), img)
                         self.mensajeLabel.setText("Agregado exitosamente!")
+#                        gray = cv2.cv2.cvtColor(img, cv2.cv2.COLOR_BGR2GRAY)   
+#                        faces = face_cascade.detectMultiScale(
+#                                gray,
+#                                scaleFactor=1.1,
+#                               minNeighbors=5,
+#                                minSize=(30, 30)
+#                            )                        
+                        # Draw a rectangle around the faces
+#                        for (x, y, w, h) in faces:
+#                            roi = img[y:y+h, x:x+w]
+#                            cv2.cv2.imwrite(os.path.join("images/"+self.nameText.text() , img_name), roi)
+#                            self.mensajeLabel.setText("Agregado exitosamente!")
                 else:
-                    self.mensajeLabel.setText("")   
+                    self.mensajeLabel.setText("Debe completar un nombre")   
         else:
-                self.mensajeLabel.setText("iniciar camara")  
+                self.mensajeLabel.setText("X")  
                 
     def entrenar(self):
         os.system("python faces-train.py")            
@@ -179,10 +180,9 @@ class MyWindowClass(QtWidgets.QMainWindow):
                 cv2.cv2.rectangle(img, (x, y), (x+w, y+h), (0, 255, 0), 2)
                 roi_gray = gray[y:y+h, x:x+w]
                 roi_color = img[y:y+h, x:x+w]
+
                 id_,conf = recognizer.predict(roi_gray)
                 if conf>=4 and conf <= 85:
-                		#print(5: #id_)
-                		#print(labels[id_])
                 		font = cv2.FONT_HERSHEY_SIMPLEX
                 		name = labels[id_]
                 		color = (255, 255, 255)
@@ -210,7 +210,7 @@ class MyWindowClass(QtWidgets.QMainWindow):
 
 
 
-capture_thread = threading.Thread(target=grab, args = (0, q, 1920, 1080, 30))
+capture_thread = threading.Thread(target=grab, args = (0, q, 640.0 , 480.0, 30))
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
