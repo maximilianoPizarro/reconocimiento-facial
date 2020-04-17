@@ -9,8 +9,7 @@ verify_ssl = true
 PyQt5 = "*"
 opencv-contrib-python-headless= "*"
 numpy = "*"
-PIL = "*" 
-pillow = "==5.3.0"
+Pillow = "*"
 
 [requires]
 python_version = "3.8"

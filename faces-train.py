@@ -1,7 +1,7 @@
 import cv2
 import os
 import numpy as np
-from PIL import Image
+from pil import Image
 import pickle
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -49,3 +49,5 @@ with open("pickles/face-labels.pickle", 'wb') as f:
 
 recognizer.train(x_train, np.array(y_labels))
 recognizer.save("recognizers/face-trainner.yml")
+
+print("Entrenamiento exitos!")

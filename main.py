@@ -121,7 +121,7 @@ class MyWindowClass(QtWidgets.QMainWindow):
                         img_name =choice("abcde")+".jpg".format(0)
                         frame = q.get()
                         img = frame["img"]        
-                        #cv2.imwrite(os.path.join('resources' , img_name), img)
+                        cv2.imwrite(os.path.join('resources' , img_name), img)
                         cv2.cv2.imwrite(os.path.join("images/"+self.nameText.text() , img_name), img)
                         self.mensajeLabel.setText("Agregado exitosamente!")
                         gray = cv2.cv2.cvtColor(img, cv2.cv2.COLOR_BGR2GRAY)   
@@ -139,10 +139,10 @@ class MyWindowClass(QtWidgets.QMainWindow):
                 else:
                     self.mensajeLabel.setText("Debe completar un nombre")   
         else:
-                self.mensajeLabel.setText("X")  
+                self.mensajeLabel.setText("No se pudo agregar")  
                 
     def entrenar(self):
-        os.system("python faces-train.py")            
+        os.system("pipenv run python faces-train.py")            
         
     def update_frame(self):
         if not q.empty():
