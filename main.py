@@ -124,18 +124,18 @@ class MyWindowClass(QtWidgets.QMainWindow):
                         #cv2.imwrite(os.path.join('resources' , img_name), img)
                         cv2.cv2.imwrite(os.path.join("images/"+self.nameText.text() , img_name), img)
                         self.mensajeLabel.setText("Agregado exitosamente!")
-#                        gray = cv2.cv2.cvtColor(img, cv2.cv2.COLOR_BGR2GRAY)   
-#                        faces = face_cascade.detectMultiScale(
-#                                gray,
-#                                scaleFactor=1.1,
-#                               minNeighbors=5,
-#                                minSize=(30, 30)
-#                            )                        
+                        gray = cv2.cv2.cvtColor(img, cv2.cv2.COLOR_BGR2GRAY)   
+                        faces = face_cascade.detectMultiScale(
+                                gray,
+                                scaleFactor=1.1,
+                               minNeighbors=5,
+                                minSize=(30, 30)
+                            )                        
                         # Draw a rectangle around the faces
-#                        for (x, y, w, h) in faces:
-#                            roi = img[y:y+h, x:x+w]
-#                            cv2.cv2.imwrite(os.path.join("images/"+self.nameText.text() , img_name), roi)
-#                            self.mensajeLabel.setText("Agregado exitosamente!")
+                        for (x, y, w, h) in faces:
+                            roi = img[y:y+h, x:x+w]
+                            cv2.cv2.imwrite(os.path.join("images/"+self.nameText.text() , img_name), roi)
+                            self.mensajeLabel.setText("Agregado exitosamente!")
                 else:
                     self.mensajeLabel.setText("Debe completar un nombre")   
         else:

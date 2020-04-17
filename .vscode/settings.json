@@ -1,3 +1,4 @@
 {
-    "git.ignoreLimitWarning": true
+    "git.ignoreLimitWarning": true,
+    "python.pythonPath": "C:\\Users\\max\\.virtualenvs\\reconocimiento-facial-dQtJcWO2\\Scripts\\python.exe"
 }
