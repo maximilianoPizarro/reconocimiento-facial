@@ -29,10 +29,10 @@ eye_cascade = cv2.CascadeClassifier('resources/data/haarcascade_eye.xml')
 smile_cascade = cv2.CascadeClassifier('resources/data/haarcascade_smile.xml')
 
 recognizer = cv2.face.LBPHFaceRecognizer_create()
-recognizer.read("recognizers/face-trainner.yml")
+recognizer.read("recognizers/entrenamiento.yml")
 
 labels = {"person_name": 1}
-with open("pickles/face-labels.pickle", 'rb') as f:
+with open("pickles/modelo.pickle", 'rb') as f:
 	og_labels = pickle.load(f)
 	labels = {v:k for k,v in og_labels.items()}
 
@@ -112,30 +112,14 @@ class MyWindowClass(QtWidgets.QMainWindow):
         self.startButton.setText('Inciando...')
         
     def agregar_foto(self):
-        #self.nameText.setText("safa")   set texto
-        #print(self.nameText.text())    get texto
         if not q.empty():
                 if str(self.mensajeLabel.text())!="":
-                        os.makedirs("images/"+self.nameText.text(), exist_ok=True)    
-                            
+                        os.makedirs("images/"+self.nameText.text(), exist_ok=True)                                
                         img_name =choice("abcde")+".jpg".format(0)
                         frame = q.get()
                         img = frame["img"]        
-                        cv2.imwrite(os.path.join('resources' , img_name), img)
                         cv2.cv2.imwrite(os.path.join("images/"+self.nameText.text() , img_name), img)
                         self.mensajeLabel.setText("Agregado exitosamente!")
-                        gray = cv2.cv2.cvtColor(img, cv2.cv2.COLOR_BGR2GRAY)   
-                        faces = face_cascade.detectMultiScale(
-                                gray,
-                                scaleFactor=1.1,
-                               minNeighbors=5,
-                                minSize=(30, 30)
-                            )                        
-                        # Draw a rectangle around the faces
-                        for (x, y, w, h) in faces:
-                            roi = img[y:y+h, x:x+w]
-                            cv2.cv2.imwrite(os.path.join("images/"+self.nameText.text() , img_name), roi)
-                            self.mensajeLabel.setText("Agregado exitosamente!")
                 else:
                     self.mensajeLabel.setText("Debe completar un nombre")   
         else:
@@ -190,7 +174,7 @@ class MyWindowClass(QtWidgets.QMainWindow):
                 		cv2.cv2.putText(img, name, (x,y), font, 1, color, stroke, cv2.cv2.LINE_AA)
                 img_item = "7.png"
                 cv2.cv2.imwrite(img_item, roi_color)
-
+                #font = cv2.FONT_HERSHEY_SIMPLEX
                 #cv2.putText(img, 'This one!', (x+w, y+h), font, 0.8, (0, 255, 0), 2, cv2.LINE_AA)
 
     def closeEvent(self, event):
